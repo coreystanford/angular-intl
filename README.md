@@ -1,2 +1,2 @@
 # angular-intl
-An internationalization (intl) library for Angular applications
+A lightweight internationalization library for Angular applications
