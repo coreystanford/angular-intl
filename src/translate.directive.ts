@@ -4,13 +4,13 @@ import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/internal/operators';
 
-// tslint:disable
 @Directive({
   selector: '[translate]',
 })
 export class TranslateDirective implements AfterViewInit, OnDestroy {
 
   @Input() translateParams: any;
+  public keyPath: string;
   private unsubscribe = new Subject<void>();
 
   constructor(private element: ElementRef,
@@ -18,12 +18,16 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    const keyPath = this.element.nativeElement.textContent.trim();
-    if (keyPath) {
+    this.keyPath = this.element.nativeElement.textContent.trim();
+    this.element.nativeElement.textContent = '';
+    if (this.keyPath) {
       this.translateService.translationsLoaded.pipe(
         filter(Boolean),
         takeUntil(this.unsubscribe)
-      ).subscribe(() => this.element.nativeElement.textContent = this.translateService.read(keyPath, this.translateParams));
+      ).subscribe(() => {
+        const readValue = this.translateService.read(this.keyPath, this.translateParams);
+        this.element.nativeElement.textContent = readValue === this.keyPath ? '' : readValue;
+      });
     }
   }
 

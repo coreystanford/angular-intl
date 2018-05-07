@@ -1,6 +1,6 @@
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from './translate.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/internal/operators';
 
@@ -11,16 +11,21 @@ import { takeUntil } from 'rxjs/internal/operators';
 export class TranslatePipe implements PipeTransform, OnDestroy {
 
   public translation: string = '';
+  public translationLoaded$: Observable<string>;
   private unsubscribe = new Subject<void>();
 
   constructor(private translateService: TranslateService) {
+    this.translationLoaded$ = translateService.translationsLoaded.pipe(
+      filter(Boolean),
+      takeUntil(this.unsubscribe)
+    );
   }
 
   transform(val, args) {
-    this.translateService.translationsLoaded.pipe(
-      filter(Boolean),
-      takeUntil(this.unsubscribe)
-    ).subscribe(() => this.translation = this.translateService.read(val, args));
+    this.translationLoaded$.subscribe(() => {
+      const readValue = this.translateService.read(val, args);
+      this.translation = readValue === val ? this.translation : readValue;
+    });
     return this.translation;
   }
 

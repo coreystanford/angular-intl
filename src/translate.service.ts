@@ -96,31 +96,34 @@ export class TranslateService {
   public get(keyPaths: string | Array<string>): Observable<TranslationResult> {
     return this.translationsLoaded.pipe(
       filter(Boolean),
-      switchMapTo(keyPaths instanceof Array ? this.getAll(keyPaths) : this.getOne(keyPaths))
+      switchMapTo(keyPaths instanceof Array
+        ? this.getAll(keyPaths)
+        : this.getOne(keyPaths))
     );
   }
 
   public getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult> {
-    const translationExists = new Subject<string>();
+    const translationLoaded = new Subject<string>();
     if (this.translations[fileName]) {
-      translationExists.next(fileName);
+      translationLoaded.next(fileName);
     } else {
       this.getFile(fileName)
-        .subscribe(
-          translations => {
+        .subscribe(translations => {
             this.translations[fileName] = translations;
-            translationExists.next(fileName);
+            translationLoaded.next(fileName);
           }, () => {
             const defaultFileName = `${this.defaultPrefix}-${fileName.split('-')[1]}`;
             this.getFile(defaultFileName).subscribe(translations => {
               this.translations[defaultFileName] = translations;
-              translationExists.next(defaultFileName);
+              translationLoaded.next(defaultFileName);
             });
           }
         );
     }
-    return translationExists.pipe(
-      switchMap(name => keyPaths instanceof Array ? this.getAll(keyPaths, name) : this.getOne(keyPaths, name))
+    return translationLoaded.pipe(
+      switchMap(name => keyPaths instanceof Array
+        ? this.getAll(keyPaths, name)
+        : this.getOne(keyPaths, name))
     );
   }
 
