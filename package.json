@@ -1,18 +1,24 @@
 {
   "name": "angular-intl",
   "description": "A lightweight internationalization library for Angular applications",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": "git@github.com:coreystanford/angular-intl.git",
   "author": "Corey Stanford",
   "license": "MIT",
+  "peerDependencies": {
+    "rxjs": "^5.0.0",
+    "@angular/core": "5.2.10"
+  },
   "devDependencies": {
-    "@angular/common": "^6.0.0",
-    "@angular/compiler": "^6.0.0",
-    "@angular/core": "^6.0.0",
-    "@angular/platform-browser": "^6.0.0",
-    "@angular/platform-server": "^6.0.0",
+    "@angular/animations": "^5.0.0",
+    "@angular/common": "^5.0.0",
+    "@angular/compiler": "^5.0.0",
+    "@angular/core": "^5.0.0",
+    "@angular/platform-browser": "^5.0.0",
+    "@angular/platform-browser-dynamic": "^5.0.0",
+    "@angular/platform-server": "^5.0.0",
     "@types/node": "^10.0.4",
-    "rxjs": "^6.1.0",
+    "rxjs": "^5.0.0",
     "typescript": "^2.8.3",
     "webpack": "^4.7.0",
     "zone.js": "^0.8.26"

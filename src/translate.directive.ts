@@ -1,8 +1,6 @@
 import { AfterViewInit, Directive, ElementRef, Input, OnDestroy } from '@angular/core';
 import { TranslateService } from './translate.service';
-import { Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { takeUntil } from 'rxjs/internal/operators';
+import { Subject } from 'rxjs/Subject';
 
 @Directive({
   selector: '[translate]',
@@ -21,13 +19,13 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
     this.keyPath = this.element.nativeElement.textContent.trim();
     this.element.nativeElement.textContent = '';
     if (this.keyPath) {
-      this.translateService.translationsLoaded.pipe(
-        filter(Boolean),
-        takeUntil(this.unsubscribe)
-      ).subscribe(() => {
-        const readValue = this.translateService.read(this.keyPath, this.translateParams);
-        this.element.nativeElement.textContent = readValue === this.keyPath ? '' : readValue;
-      });
+      this.translateService.translationsLoaded
+        .filter(Boolean)
+        .takeUntil(this.unsubscribe)
+        .subscribe(() => {
+          const readValue = this.translateService.read(this.keyPath, this.translateParams);
+          this.element.nativeElement.textContent = readValue === this.keyPath ? '' : readValue;
+        });
     }
   }
 

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { switchMap, switchMapTo } from 'rxjs/internal/operators';
 
 interface TranslationResult {
   [key: string]: string
@@ -94,12 +94,11 @@ export class TranslateService {
   }
 
   public get(keyPaths: string | Array<string>): Observable<TranslationResult> {
-    return this.translationsLoaded.pipe(
-      filter(Boolean),
-      switchMapTo(keyPaths instanceof Array
+    return this.translationsLoaded
+      .filter(Boolean)
+      .switchMapTo(keyPaths instanceof Array
         ? this.getAll(keyPaths)
-        : this.getOne(keyPaths))
-    );
+        : this.getOne(keyPaths));
   }
 
   public getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult> {
@@ -120,19 +119,18 @@ export class TranslateService {
           }
         );
     }
-    return translationLoaded.pipe(
-      switchMap(name => keyPaths instanceof Array
+    return translationLoaded
+      .switchMap(name => keyPaths instanceof Array
         ? this.getAll(keyPaths, name)
-        : this.getOne(keyPaths, name))
-    );
+        : this.getOne(keyPaths, name));
   }
 
   private getOne(keyPath: string, fileName = this.overrideKey): Observable<TranslationResult> {
-    return of({ [keyPath]: this.read(keyPath, {}, fileName) })
+    return Observable.of({ [keyPath]: this.read(keyPath, {}, fileName) })
   }
 
   private getAll(keyPaths: Array<string>, fileName = this.overrideKey): Observable<TranslationResult> {
-    return of(keyPaths.reduce(
+    return Observable.of(keyPaths.reduce(
       (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName) }), {}
     ));
   }
