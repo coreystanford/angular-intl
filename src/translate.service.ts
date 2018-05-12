@@ -4,6 +4,11 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { HttpClient } from '@angular/common/http';
 
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/switchMapTo';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/of';
+
 interface TranslationResult {
   [key: string]: string
 }
@@ -48,7 +53,7 @@ export class TranslateService {
     return browserLanguage;
   }
 
-  public setDefault(fileName) {
+  public setDefault(fileName: string) {
     this.defaultKey = fileName;
     this.defaultPrefix = fileName.split('-')[0];
     if (this.translations[this.defaultKey]) {
@@ -62,7 +67,7 @@ export class TranslateService {
     }
   }
 
-  public setLanguage(fileName) {
+  public setLanguage(fileName: string) {
     this.overrideKey = fileName;
     if (this.translations[this.overrideKey]) {
       this.translationsLoaded.next(true);
@@ -75,7 +80,7 @@ export class TranslateService {
     }
   }
 
-  public read(keyPath, params = {}, overrideKey = this.overrideKey): string {
+  public read(keyPath: string, params = {}, overrideKey = this.overrideKey): string {
     let value: string = CONSTANTS.EXIT;
     const path = keyPath.split('.');
     if (this.translations[overrideKey]) {

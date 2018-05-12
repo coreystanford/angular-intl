@@ -2,6 +2,9 @@ import { AfterViewInit, Directive, ElementRef, Input, OnDestroy } from '@angular
 import { TranslateService } from './translate.service';
 import { Subject } from 'rxjs/Subject';
 
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/takeUntil';
+
 @Directive({
   selector: '[translate]',
 })
