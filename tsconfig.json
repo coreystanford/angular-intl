@@ -2,9 +2,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist",
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -15,8 +15,6 @@
     "lib": [
       "es2016",
       "dom"
-    ],
-    "include": ["src/**/*.ts"],
-    "exclude": ["node_modules", "dist", "**/*.test.ts"]
+    ]
   }
 }

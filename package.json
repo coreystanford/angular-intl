@@ -5,9 +5,14 @@
   "repository": "git@github.com:coreystanford/angular-intl.git",
   "author": "Corey Stanford",
   "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
   "peerDependencies": {
-    "rxjs": "^5.0.0",
-    "@angular/core": "5.2.10"
+    "@angular/core": "5.2.10",
+    "rxjs": "^5.0.0"
   },
   "devDependencies": {
     "@angular/animations": "^5.0.0",

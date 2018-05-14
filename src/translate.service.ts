@@ -9,15 +9,15 @@ import 'rxjs/add/operator/switchMapTo';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 
-interface TranslationResult {
+export interface TranslationResult {
   [key: string]: string
 }
 
-interface TranslateConfiguration {
+export interface TranslateConfiguration {
   path: string;
 }
 
-enum CONSTANTS {
+export enum CONSTANTS {
   EXIT = 'EXIT'
 }
 
