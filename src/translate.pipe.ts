@@ -13,7 +13,7 @@ import 'rxjs/add/operator/takeUntil';
 export class TranslatePipe implements PipeTransform, OnDestroy {
 
   public translation: string = '';
-  public translationLoaded$: Observable<string>;
+  public translationLoaded$: Observable<boolean>;
   private unsubscribe = new Subject<void>();
 
   constructor(private translateService: TranslateService) {

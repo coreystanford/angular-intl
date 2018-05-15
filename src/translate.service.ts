@@ -8,10 +8,13 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMapTo';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/from';
 
-export interface TranslationResult {
+export interface MultipleTranslationResult {
   [key: string]: string
 }
+
+export type TranslationResult = MultipleTranslationResult | string;
 
 export interface TranslateConfiguration {
   path: string;
@@ -91,7 +94,7 @@ export class TranslateService {
     } else if (this.translations[this.defaultKey]) {
       value = this.readValue(path, this.translations[this.defaultKey]);
     }
-    if (params && params !== {}) {
+    if (Boolean(params) && params !== {}) {
       value = Object.keys(params)
         .reduce((final, key) => final.replace(this.matcher(key), params[key]), value);
     }
@@ -103,7 +106,8 @@ export class TranslateService {
       .filter(Boolean)
       .switchMapTo(keyPaths instanceof Array
         ? this.getAll(keyPaths)
-        : this.getOne(keyPaths));
+        : this.getOne(keyPaths)
+      );
   }
 
   public getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult> {
@@ -127,11 +131,12 @@ export class TranslateService {
     return translationLoaded
       .switchMap(name => keyPaths instanceof Array
         ? this.getAll(keyPaths, name)
-        : this.getOne(keyPaths, name));
+        : this.getOne(keyPaths, name)
+      );
   }
 
   private getOne(keyPath: string, fileName = this.overrideKey): Observable<TranslationResult> {
-    return Observable.of({ [keyPath]: this.read(keyPath, {}, fileName) })
+    return Observable.from([this.read(keyPath, {}, fileName)])
   }
 
   private getAll(keyPaths: Array<string>, fileName = this.overrideKey): Observable<TranslationResult> {
