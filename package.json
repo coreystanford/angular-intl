@@ -13,7 +13,7 @@
     "watch": "jest --watch",
     "lint": "tslint --project tslint.json src/**/**.ts",
     "check": "yarn test && yarn lint && yarn build",
-    "postinstall": "tsc",
+    "prepublish": "tsc",
     "build": "rm -rf ./dist && tsc"
   },
   "jest": {
