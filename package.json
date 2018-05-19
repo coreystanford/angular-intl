@@ -1,6 +1,7 @@
 {
   "name": "angular-intl",
   "description": "A lightweight internationalization library for Angular applications",
+  "keywords": ["angular", "angular 2", "intl", "internationalization", "i18n", "internationalize", "localize", "localization", "translate", "translation"],
   "version": "1.0.2",
   "repository": "git@github.com:coreystanford/angular-intl.git",
   "author": "Corey Stanford",
@@ -11,8 +12,9 @@
     "test": "jest",
     "watch": "jest --watch",
     "lint": "tslint --project tslint.json src/**/**.ts",
-    "prepublish": "tsc",
-    "build": "tsc"
+    "check": "yarn test && yarn lint && yarn build",
+    "postinstall": "tsc",
+    "build": "rm -rf ./dist && tsc"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/setup-jest.ts",

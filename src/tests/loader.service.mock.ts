@@ -1,6 +1,8 @@
 import { Observable } from 'rxjs/Observable';
 import { LoaderService } from '../loader.service';
 
+import 'rxjs/add/observable/of';
+
 export const translations = {
   'default-en': {
     'BODY': {
