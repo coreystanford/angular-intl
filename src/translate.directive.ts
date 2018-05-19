@@ -17,8 +17,8 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
 
   @Input() translateParams: any;
 
-  constructor(private element: ElementRef,
-              private translateService: TranslateService) {
+  constructor(public element: ElementRef,
+              public translateService: TranslateService) {
     this.translationLoaded$ = this.translateService.translationsLoaded
       .filter(Boolean)
       .takeUntil(this.unsubscribe)

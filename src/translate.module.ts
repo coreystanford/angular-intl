@@ -1,6 +1,12 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { TranslateDirective, TranslatePipe, TranslateService } from '.';
 import { HttpClientModule } from '@angular/common/http';
+import {
+  TranslateDirective,
+  TranslatePipe,
+  TranslateService,
+  TranslationLoaderService
+} from '.';
+import { CONFIG } from './translate.service';
 
 @NgModule({
   imports: [HttpClientModule],
@@ -18,10 +24,10 @@ export class TranslateModule {
    * Use this method in your root module to provide the TranslateService
    * @returns {ModuleWithProviders}
    */
-  static forRoot(config): ModuleWithProviders {
+  static forRoot(config = {}): ModuleWithProviders {
     return {
       ngModule: TranslateModule,
-      providers: [TranslateService, { provide: 'config', useValue: config }]
+      providers: [TranslateService, { provide: CONFIG, useValue: config }, TranslationLoaderService]
     };
   };
   /**

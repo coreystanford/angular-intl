@@ -1,11 +1,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./lib",
+    "outDir": "./dist",
     "baseUrl": "./src",
     "sourceMap": true,
     "declaration": true,
-    "moduleResolution": "node",
+    "module": "commonjs",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
@@ -16,5 +16,8 @@
       "es2016",
       "dom"
     ]
-  }
+  },
+  "include": [
+    "src"
+  ]
 }

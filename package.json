@@ -8,11 +8,24 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "test": "jest",
+    "watch": "jest --watch",
+    "lint": "tslint --project tslint.json src/**/**.ts",
+    "prepublish": "tsc",
     "build": "tsc"
   },
-  "peerDependencies": {
-    "@angular/core": "5.2.10",
-    "rxjs": "^5.0.0"
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/setup-jest.ts",
+    "verbose": true,
+    "collectCoverage": true,
+    "transform": { "^.+\\.(tsx?|html)$": "ts-jest" },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "testPathIgnorePatterns": ["<rootDir>/node_modules/", "mock.ts", "dist"],
+    "coverageDirectory": "src",
+    "collectCoverageFrom": ["src/**/*.ts"],
+    "coveragePathIgnorePatterns": ["<rootDir>/src/tests"],
+    "coverageReporters": ["text", "text-summary"]
   },
   "devDependencies": {
     "@angular/animations": "^5.0.0",
@@ -22,10 +35,19 @@
     "@angular/platform-browser": "^5.0.0",
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/platform-server": "^5.0.0",
+    "@types/jest": "^22.2.3",
     "@types/node": "^10.0.4",
+    "codelyzer": "^4.3.0",
+    "jest": "^22.4.4",
+    "jest-zone-patch": "^0.0.8",
     "rxjs": "^5.0.0",
+    "ts-jest": "^22.4.6",
+    "tsc": "^1.20150623.0",
+    "tslint": "^5.10.0",
     "typescript": "^2.8.3",
-    "webpack": "^4.7.0",
     "zone.js": "^0.8.26"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
