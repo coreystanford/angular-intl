@@ -15,7 +15,7 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
   public translationLoaded$: Observable<boolean>;
   private unsubscribe = new Subject<void>();
 
-  @Input() translateParams: any;
+  @Input('translate') params: any;
 
   constructor(public element: ElementRef,
               public translateService: TranslateService) {
@@ -28,7 +28,7 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
     this.keyPath = this.element.nativeElement.textContent.trim();
     this.element.nativeElement.textContent = '';
     this.translationLoaded$.subscribe(() => {
-      const readValue = this.translateService.read(this.keyPath, this.translateParams);
+      const readValue = this.translateService.read(this.keyPath, this.params);
       this.element.nativeElement.textContent = readValue === this.keyPath ? '' : readValue;
     });
   }
