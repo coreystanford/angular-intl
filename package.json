@@ -24,7 +24,7 @@
     "testPathIgnorePatterns": ["<rootDir>/node_modules/", "mock.ts", "dist"],
     "coverageDirectory": "src",
     "collectCoverageFrom": ["src/**/*.ts"],
-    "coveragePathIgnorePatterns": ["<rootDir>/src/tests"],
+    "coveragePathIgnorePatterns": ["<rootDir>/src/tests", "<rootDir>/src/types"],
     "coverageReporters": ["text", "text-summary"]
   },
   "devDependencies": {

@@ -1,31 +1,17 @@
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { HttpClient } from '@angular/common/http';
+
+import { LoaderService } from './loader.service';
+import { CONFIG, CONSTANTS, TranslateConfiguration, TranslationResult } from './types';
 
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMapTo';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/from';
-import { TranslationLoaderService } from './translation-loader.service';
-
-export interface MultipleTranslationResult {
-  [key: string]: string
-}
-
-export type TranslationResult = MultipleTranslationResult | string;
-
-export const CONFIG = new InjectionToken<TranslateConfiguration>('config');
-
-export interface TranslateConfiguration {
-  path: string;
-}
-
-export enum CONSTANTS {
-  EXIT = 'EXIT'
-}
 
 @Injectable()
 export class TranslateService {
@@ -35,17 +21,14 @@ export class TranslateService {
   public overrideKey;
   public translations = {};
 
-  public path = '/assets/languages/';
-  public extension = '.json';
-  public translationLoaderService: TranslationLoaderService;
+  public loaderService: LoaderService;
   public translationsLoaded = new BehaviorSubject<boolean>(false);
 
   private matcher = key => new RegExp('{{\\s?[\\b' + key + '\\b]*\\s?}}', 'gm');
 
   constructor(public http: HttpClient,
               @Inject(CONFIG) public config: TranslateConfiguration) {
-    this.translationLoaderService = new TranslationLoaderService(http);
-    this.path = config.path ? config.path : this.path;
+    this.loaderService = new LoaderService(http, config);
   }
 
   public getBrowserLanguage() {
@@ -67,7 +50,7 @@ export class TranslateService {
     if (this.translations[this.defaultKey]) {
       this.translationsLoaded.next(true);
     } else {
-      this.translationLoaderService.getFile(fileName)
+      this.loaderService.getFile(fileName)
         .subscribe(translations => {
           this.translations[this.defaultKey] = translations;
           this.translationsLoaded.next(true);
@@ -80,7 +63,7 @@ export class TranslateService {
     if (this.translations[this.overrideKey]) {
       this.translationsLoaded.next(true);
     } else {
-      this.translationLoaderService.getFile(fileName)
+      this.loaderService.getFile(fileName)
         .subscribe(translations => {
           this.translations[this.overrideKey] = translations;
           this.translationsLoaded.next(true);
@@ -120,13 +103,13 @@ export class TranslateService {
     if (this.translations[fileName]) {
       translationLoaded.next(fileName);
     } else {
-      this.translationLoaderService.getFile(fileName)
+      this.loaderService.getFile(fileName)
         .subscribe(translations => {
             this.translations[fileName] = translations;
             translationLoaded.next(fileName);
           }, () => {
             const defaultFileName = `${this.defaultPrefix}-${fileName.split('-')[1]}`;
-            this.translationLoaderService.getFile(defaultFileName).subscribe(translations => {
+            this.loaderService.getFile(defaultFileName).subscribe(translations => {
               this.translations[defaultFileName] = translations;
               translationLoaded.next(defaultFileName);
             });

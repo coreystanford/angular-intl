@@ -1,17 +1,18 @@
 import { Observable } from 'rxjs/Observable';
-import { TranslationLoaderService } from '../translation-loader.service';
+import { LoaderService } from '../loader.service';
 
-const translations = {
+export const translations = {
   'default-en': {
     'BODY': {
-      'WITH_KEY': 'With key text example'
+      'KNOWN_KEY': 'Known key example'
     }
   }
 };
 
-export const TranslationLoaderServiceMock: TranslationLoaderService = {
+export const LoaderServiceMock: LoaderService = {
   path: '/assets/language',
   extension: '.json',
   http: null,
+  config: null,
   getFile: (key) => Observable.of(translations[key])
 };

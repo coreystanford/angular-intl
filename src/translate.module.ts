@@ -4,9 +4,9 @@ import {
   TranslateDirective,
   TranslatePipe,
   TranslateService,
-  TranslationLoaderService
+  LoaderService
 } from '.';
-import { CONFIG } from './translate.service';
+import { CONFIG } from './types';
 
 @NgModule({
   imports: [HttpClientModule],
@@ -27,7 +27,7 @@ export class TranslateModule {
   static forRoot(config = {}): ModuleWithProviders {
     return {
       ngModule: TranslateModule,
-      providers: [TranslateService, { provide: CONFIG, useValue: config }, TranslationLoaderService]
+      providers: [TranslateService, { provide: CONFIG, useValue: config }, LoaderService]
     };
   };
   /**

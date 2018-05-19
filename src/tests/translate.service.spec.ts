@@ -1,5 +1,5 @@
 import { TranslateService } from '../translate.service';
-import { TranslationLoaderServiceMock } from './translation-loader.service.mock';
+import { LoaderServiceMock } from './loader.service.mock';
 import { async, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '../translate.module';
 
@@ -11,7 +11,7 @@ describe('Translate Service', () => {
       imports: [TranslateModule.forRoot()]
     });
     translateService = TestBed.get(TranslateService);
-    translateService.translationLoaderService = TranslationLoaderServiceMock;
+    translateService.loaderService = LoaderServiceMock;
   }));
 
   test('should exist', () => expect(translateService).toBeDefined())

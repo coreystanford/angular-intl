@@ -2,18 +2,22 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateService } from '../translate.service';
 import { TranslateModule } from '../translate.module';
-import { TranslationLoaderServiceMock } from './translation-loader.service.mock';
+import { LoaderServiceMock, translations } from './loader.service.mock';
 
 @Component({
   template: `
-    <p #withKey>{{ 'BODY.WITH_KEY' | translate }}</p>
+    <p #knownKey>{{ 'BODY.KNOWN_KEY' | translate }}</p>
+    <p #unknownKey>{{ 'BODY.UNKNOWN_KEY' | translate }}</p>
+    <p #noKey>{{ '' | translate }}</p>
   `
 })
 class TranslatePipeSpecComponent {
-  @ViewChild('withKey') withKey: ElementRef;
+  @ViewChild('knownKey') knownKey: ElementRef;
+  @ViewChild('unknownKey') unknownKey: ElementRef;
+  @ViewChild('noKey') noKey: ElementRef;
 }
 
-describe('Translate Directive', () => {
+describe('Translate Pipe', () => {
   let component: TranslatePipeSpecComponent;
   let fixture: ComponentFixture<TranslatePipeSpecComponent>;
   let translateService: TranslateService;
@@ -24,7 +28,7 @@ describe('Translate Directive', () => {
       declarations: [TranslatePipeSpecComponent]
     });
     translateService = TestBed.get(TranslateService);
-    translateService.translationLoaderService = TranslationLoaderServiceMock;
+    translateService.loaderService = LoaderServiceMock;
     fixture = TestBed.createComponent(TranslatePipeSpecComponent);
     component = fixture.componentInstance;
   }));
@@ -33,18 +37,33 @@ describe('Translate Directive', () => {
     expect(component).toBeDefined();
   });
 
-  describe('Element withKey', () => {
+  describe('setDefault to default-en', () => {
+
+    const fileName = 'default-en';
 
     beforeEach(() => {
-      translateService.setDefault('default-en');
+      translateService.setDefault(fileName);
       fixture.detectChanges();
     });
 
-    test('text loads', () => {
-      const expectedText = translateService.translations['default-en'].BODY.WITH_KEY;
-      const resultText = component.withKey.nativeElement.innerHTML;
+    test('an element with a known key loads the value', () => {
+      const expectedText = translations[fileName].BODY.KNOWN_KEY;
+      const resultText = component.knownKey.nativeElement.innerHTML;
       expect(expectedText).toEqual(resultText);
     });
+
+    test('an element with an unknown key loads an empty string', () => {
+      const expectedText = '';
+      const resultText = component.unknownKey.nativeElement.innerHTML;
+      expect(expectedText).toEqual(resultText);
+    });
+
+    test('an element without a key loads an empty string', () => {
+      const expectedText = '';
+      const resultText = component.noKey.nativeElement.innerHTML;
+      expect(expectedText).toEqual(resultText);
+    });
+
   })
 
 });
