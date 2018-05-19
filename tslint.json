@@ -102,13 +102,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "dsp",
+      "",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "dsp",
+      "",
       "kebab-case"
     ],
     "use-input-property-decorator": true,

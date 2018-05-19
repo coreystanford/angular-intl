@@ -4,22 +4,14 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { HttpClient } from '@angular/common/http';
 
+import { LoaderService } from './loader.service';
+import { CONFIG, CONSTANTS, TranslateConfiguration, TranslationResult } from './types';
+
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMapTo';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
-
-export interface TranslationResult {
-  [key: string]: string
-}
-
-export interface TranslateConfiguration {
-  path: string;
-}
-
-export enum CONSTANTS {
-  EXIT = 'EXIT'
-}
+import 'rxjs/add/observable/from';
 
 @Injectable()
 export class TranslateService {
@@ -29,15 +21,14 @@ export class TranslateService {
   public overrideKey;
   public translations = {};
 
-  public path = '/assets/languages/';
-  public extension = '.json';
+  public loaderService: LoaderService;
   public translationsLoaded = new BehaviorSubject<boolean>(false);
 
   private matcher = key => new RegExp('{{\\s?[\\b' + key + '\\b]*\\s?}}', 'gm');
 
-  constructor(private http: HttpClient,
-              @Inject('config') private config: TranslateConfiguration) {
-    this.path = config.path ? config.path : this.path;
+  constructor(public http: HttpClient,
+              @Inject(CONFIG) public config: TranslateConfiguration) {
+    this.loaderService = new LoaderService(http, config);
   }
 
   public getBrowserLanguage() {
@@ -59,7 +50,7 @@ export class TranslateService {
     if (this.translations[this.defaultKey]) {
       this.translationsLoaded.next(true);
     } else {
-      this.getFile(fileName)
+      this.loaderService.getFile(fileName)
         .subscribe(translations => {
           this.translations[this.defaultKey] = translations;
           this.translationsLoaded.next(true);
@@ -72,7 +63,7 @@ export class TranslateService {
     if (this.translations[this.overrideKey]) {
       this.translationsLoaded.next(true);
     } else {
-      this.getFile(fileName)
+      this.loaderService.getFile(fileName)
         .subscribe(translations => {
           this.translations[this.overrideKey] = translations;
           this.translationsLoaded.next(true);
@@ -91,7 +82,7 @@ export class TranslateService {
     } else if (this.translations[this.defaultKey]) {
       value = this.readValue(path, this.translations[this.defaultKey]);
     }
-    if (params && params !== {}) {
+    if (Boolean(params) && params !== {}) {
       value = Object.keys(params)
         .reduce((final, key) => final.replace(this.matcher(key), params[key]), value);
     }
@@ -103,7 +94,8 @@ export class TranslateService {
       .filter(Boolean)
       .switchMapTo(keyPaths instanceof Array
         ? this.getAll(keyPaths)
-        : this.getOne(keyPaths));
+        : this.getOne(keyPaths)
+      );
   }
 
   public getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult> {
@@ -111,13 +103,13 @@ export class TranslateService {
     if (this.translations[fileName]) {
       translationLoaded.next(fileName);
     } else {
-      this.getFile(fileName)
+      this.loaderService.getFile(fileName)
         .subscribe(translations => {
             this.translations[fileName] = translations;
             translationLoaded.next(fileName);
           }, () => {
             const defaultFileName = `${this.defaultPrefix}-${fileName.split('-')[1]}`;
-            this.getFile(defaultFileName).subscribe(translations => {
+            this.loaderService.getFile(defaultFileName).subscribe(translations => {
               this.translations[defaultFileName] = translations;
               translationLoaded.next(defaultFileName);
             });
@@ -127,21 +119,22 @@ export class TranslateService {
     return translationLoaded
       .switchMap(name => keyPaths instanceof Array
         ? this.getAll(keyPaths, name)
-        : this.getOne(keyPaths, name));
+        : this.getOne(keyPaths, name)
+      );
   }
 
-  private getOne(keyPath: string, fileName = this.overrideKey): Observable<TranslationResult> {
-    return Observable.of({ [keyPath]: this.read(keyPath, {}, fileName) })
+  public getOne(keyPath: string, fileName = this.overrideKey): Observable<TranslationResult> {
+    return Observable.from([this.read(keyPath, {}, fileName)])
   }
 
-  private getAll(keyPaths: Array<string>, fileName = this.overrideKey): Observable<TranslationResult> {
+  public getAll(keyPaths: Array<string>, fileName = this.overrideKey): Observable<TranslationResult> {
     return Observable.of(keyPaths.reduce(
       (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName) }), {}
     ));
   }
 
   // this is a tailored 'reduce' method that breaks if a value is not found
-  private readValue(path: Array<any>, translation: any): string | CONSTANTS.EXIT {
+  public readValue(path: Array<any>, translation: any): string | CONSTANTS.EXIT {
     const length = path.length;
     for (let i = 0; i < length; i++) {
       translation = translation[path[i]] ? translation[path[i]] : CONSTANTS.EXIT;
@@ -150,10 +143,6 @@ export class TranslateService {
       }
     }
     return translation;
-  }
-
-  private getFile(fileName) {
-    return this.http.get(this.path + fileName + this.extension)
   }
 
 }

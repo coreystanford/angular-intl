@@ -1,6 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, Input, OnDestroy } from '@angular/core';
 import { TranslateService } from './translate.service';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/takeUntil';
@@ -10,26 +11,26 @@ import 'rxjs/add/operator/takeUntil';
 })
 export class TranslateDirective implements AfterViewInit, OnDestroy {
 
-  @Input() translateParams: any;
   public keyPath: string;
+  public translationLoaded$: Observable<boolean>;
   private unsubscribe = new Subject<void>();
 
-  constructor(private element: ElementRef,
-              private translateService: TranslateService) {
+  @Input() translateParams: any;
+
+  constructor(public element: ElementRef,
+              public translateService: TranslateService) {
+    this.translationLoaded$ = this.translateService.translationsLoaded
+      .filter(Boolean)
+      .takeUntil(this.unsubscribe)
   }
 
   ngAfterViewInit() {
     this.keyPath = this.element.nativeElement.textContent.trim();
     this.element.nativeElement.textContent = '';
-    if (this.keyPath) {
-      this.translateService.translationsLoaded
-        .filter(Boolean)
-        .takeUntil(this.unsubscribe)
-        .subscribe(() => {
-          const readValue = this.translateService.read(this.keyPath, this.translateParams);
-          this.element.nativeElement.textContent = readValue === this.keyPath ? '' : readValue;
-        });
-    }
+    this.translationLoaded$.subscribe(() => {
+      const readValue = this.translateService.read(this.keyPath, this.translateParams);
+      this.element.nativeElement.textContent = readValue === this.keyPath ? '' : readValue;
+    });
   }
 
   ngOnDestroy() {
