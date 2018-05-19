@@ -27,7 +27,6 @@ describe('Translate Directive', () => {
     translateService.translationLoaderService = TranslationLoaderServiceMock;
     fixture = TestBed.createComponent(TranslateDirectiveSpecComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   }));
 
   test('should exist', () => {
@@ -35,6 +34,12 @@ describe('Translate Directive', () => {
   });
 
   describe('Element withKey', () => {
+
+    beforeEach(() => {
+      translateService.setDefault('default-en');
+      fixture.detectChanges();
+    });
+
     test('text loads', () => {
       translateService.setDefault('default-en');
       const expectedText = translateService.translations['default-en'].BODY.WITH_KEY;
