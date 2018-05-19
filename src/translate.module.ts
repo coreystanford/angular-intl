@@ -27,7 +27,11 @@ export class TranslateModule {
   static forRoot(config = {}): ModuleWithProviders {
     return {
       ngModule: TranslateModule,
-      providers: [TranslateService, { provide: CONFIG, useValue: config }, LoaderService]
+      providers: [
+        TranslateService,
+        LoaderService,
+        { provide: CONFIG, useValue: config }
+      ]
     };
   };
   /**
