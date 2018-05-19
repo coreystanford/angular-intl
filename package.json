@@ -2,7 +2,7 @@
   "name": "angular-intl",
   "description": "A lightweight internationalization library for Angular applications",
   "keywords": ["angular", "angular 2", "intl", "internationalization", "i18n", "internationalize", "localize", "localization", "translate", "translation"],
-  "version": "1.1.0",
+  "version": "1.1.1",
   "repository": "git@github.com:coreystanford/angular-intl.git",
   "author": "Corey Stanford",
   "license": "MIT",
