@@ -1,8 +1,19 @@
 {
   "name": "angular-intl",
   "description": "A lightweight internationalization library for Angular applications",
-  "keywords": ["angular", "angular 2", "intl", "internationalization", "i18n", "internationalize", "localize", "localization", "translate", "translation"],
-  "version": "1.1.1",
+  "keywords": [
+    "angular",
+    "angular 2",
+    "intl",
+    "internationalization",
+    "i18n",
+    "internationalize",
+    "localize",
+    "localization",
+    "translate",
+    "translation"
+  ],
+  "version": "1.1.2",
   "repository": "git@github.com:coreystanford/angular-intl.git",
   "author": "Corey Stanford",
   "license": "MIT",
@@ -20,14 +31,35 @@
     "setupTestFrameworkScriptFile": "<rootDir>/setup-jest.ts",
     "verbose": true,
     "collectCoverage": true,
-    "transform": { "^.+\\.(tsx?|html)$": "ts-jest" },
+    "transform": {
+      "^.+\\.(tsx?|html)$": "ts-jest"
+    },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-    "testPathIgnorePatterns": ["<rootDir>/node_modules/", "mock.ts", "dist"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "mock.ts",
+      "dist"
+    ],
     "coverageDirectory": "src",
-    "collectCoverageFrom": ["src/**/*.ts"],
-    "coveragePathIgnorePatterns": ["<rootDir>/src/tests", "<rootDir>/src/types"],
-    "coverageReporters": ["text", "text-summary"]
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/tests",
+      "<rootDir>/src/types"
+    ],
+    "coverageReporters": [
+      "text",
+      "text-summary"
+    ]
   },
   "devDependencies": {
     "@angular/animations": "^5.0.0",
