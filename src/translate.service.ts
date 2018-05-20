@@ -58,7 +58,7 @@ export class TranslateService {
     }
   }
 
-  public setLanguage(fileName: string) {
+  public setOverride(fileName: string) {
     this.overrideKey = fileName;
     if (this.translations[this.overrideKey]) {
       this.translationsLoaded.next(true);
