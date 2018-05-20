@@ -99,11 +99,13 @@ this.translateService.getByFileName('BODY.TITLE', 'alternate-en') // where 'alte
 
 ## API
 
-- `getBrowserLanguage(): void`
+- `getBrowserLanguage(): string`
 
 - `setDefault(fileName: string): void`
 
 - `setLanguage(fileName: string): void`
+
+- `translationsLoaded: BehaviorSubject<boolean>`
 
 - `get(keyPaths: string | Array<string>): Observable<TranslationResult>`
 
