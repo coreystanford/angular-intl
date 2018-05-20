@@ -115,7 +115,7 @@ export class TranslateService {
     ));
   }
 
-  private read(keyPath: string, params = {}, overrideKey = this.overrideKey): string {
+  public read(keyPath: string, params = {}, overrideKey = this.overrideKey): string {
     let value: string = CONSTANTS.EXIT;
     const path = keyPath.split('.');
     if (this.translations[overrideKey]) {
