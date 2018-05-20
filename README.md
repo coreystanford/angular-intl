@@ -100,7 +100,7 @@ this.translateService.getByFileName('BODY.TITLE', 'alternate-en') // where 'alte
 ## API
 
 `getBrowserLanguage(): string`
-   - This returns the current browser language code. Ex. 'English = en', 'French = fr'.
+   - This returns the current browser language code.
 
 `setDefault(fileName: string): void`
    - Sets the default language. This can be used on its own, or as a fallback.
@@ -109,10 +109,10 @@ this.translateService.getByFileName('BODY.TITLE', 'alternate-en') // where 'alte
    - Sets the language over the default. This should only be used once a default language has been specified, as it will be the fallback.
 
 `translationsLoaded: BehaviorSubject<boolean>`
-   - This is used to determine exactly when translations have arrived (from the network call after `setDefault or `setLanguage` have been executed). You can `subscribe` to this if you wish to perform operations when translations are loaded throughout the lifecycle of the application.
+   - This is used to determine exactly when translations have arrived (from the network call after `setDefault` or `setLanguage` have been executed). You can `subscribe` to this if you wish to perform operations when translations are loaded throughout the lifecycle of the application.
 
 `get(keyPaths: string | Array<string>): Observable<TranslationResult>`
-   - Accepts a string or an array of strings. Returns a string, or an object of strings, with the original key as the key. This will only return values once translations have loaded, so it is safe to use anywhere.
+   - Accepts a string or an array of strings. Returns an `Observable` that contains a string, or an object of strings keyed by the original translation key path (ex. 'BODY.TITLE'). This will only return values once translations have loaded, so it is safe to use anywhere.
 
 `getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult>`
-   - Unlike `setDefault` or `setLanguage`, which are globally applied, this method will load a translation file and return the translated key without enforcing that language globally. Like `get` it can accept a string, or an array of strings.
+   - Unlike `setDefault` or `setLanguage`, which are globally applied, this method will load a translation file and return the translated key without enforcing that language globally. Like `get`, it can accept a string or an array of strings and returns in the same pattern.
