@@ -72,7 +72,7 @@ this.translateService.get(['BODY.TITLE', 'BODY.DESCRIPTION'])
   });
 ```
 
-Default overrides are also available, so after calling `setDefault`, you may call `setLanguage`, which will be used first, and then fall back to the default if the key is not found in the language file specified in `setLanguage`:
+Default overrides are also available, so after calling `setDefault`, you may call `setOverride`, which will be used first, and then fall back to the default if the key is not found in the language file specified in `setOverride`:
 
 eg. '/assets/languages/override-en.json':
 ```json
@@ -85,7 +85,7 @@ eg. '/assets/languages/override-en.json':
 
 ```ts
 this.translateService.setDefault('default-en');
-this.translateService.setLanguage('override-en');
+this.translateService.setOverride('override-en');
 ```
 
 This will output `'BODY.TITLE' = 'Title Translation Override'`(from `override-en.json`), and `'BODY.DESCRIPTION' = 'Description translation'` (from `default-en.json`)
@@ -96,3 +96,23 @@ Alternatively, you can get a translation without enforcing an entire file overri
 this.translateService.getByFileName('BODY.TITLE', 'alternate-en') // where 'alternate-en' is yet another language file
   .subscribe(translatedTitle => this.title = translatedTitle);
 ```
+
+## API
+
+`getBrowserLanguage(): string`
+   - This returns the current browser language code.
+
+`setDefault(fileName: string): void`
+   - Sets the default language. This can be used on its own, or as a fallback.
+
+`setOverride(fileName: string): void`
+   - Sets the language over the default. This should only be used once a default language has been specified, and does not need to be used unless you intend to override a default translation file.
+
+`translationsLoaded: BehaviorSubject<boolean>`
+   - This is used to determine exactly when translations have arrived (from the network call after `setDefault` or `setOverride` have been executed). You can `subscribe` to this if you wish to perform operations when translations are loaded throughout the lifecycle of the application.
+
+`get(keyPaths: string | Array<string>): Observable<TranslationResult>`
+   - Accepts a string or an array of strings. Returns an `Observable` that contains a string, or an object of strings keyed by the original translation key path (ex. 'BODY.TITLE'). This will only return values once translations have loaded, so it is safe to use anywhere.
+
+`getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult>`
+   - Unlike `setDefault` or `setOverride`, which are globally applied, this method will load a translation file and return the translated key without enforcing that language globally. Like `get`, it can accept a string or an array of strings and returns in the same pattern.
