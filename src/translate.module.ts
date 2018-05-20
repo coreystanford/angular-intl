@@ -9,7 +9,7 @@ import {
 import { CONFIG } from './types';
 
 export function configFactory(config) {
-  return config;
+  return () => config;
 }
 
 @NgModule({
