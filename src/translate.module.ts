@@ -8,10 +8,6 @@ import {
 } from '.';
 import { CONFIG } from './types';
 
-export function configFactory(config) {
-  return () => config;
-}
-
 @NgModule({
   imports: [HttpClientModule],
   declarations: [
@@ -30,7 +26,7 @@ export class TranslateModule {
       providers: [
         TranslateService,
         LoaderService,
-        { provide: CONFIG, useFactory: configFactory(config) }
+        { provide: CONFIG, useValue: config }
       ]
     };
   };

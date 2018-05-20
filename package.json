@@ -54,7 +54,8 @@
     ],
     "coveragePathIgnorePatterns": [
       "<rootDir>/src/tests",
-      "<rootDir>/src/types"
+      "<rootDir>/src/types",
+      "<rootDir>/src/mocks"
     ],
     "coverageReporters": [
       "text",
