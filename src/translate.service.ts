@@ -71,24 +71,6 @@ export class TranslateService {
     }
   }
 
-  public read(keyPath: string, params = {}, overrideKey = this.overrideKey): string {
-    let value: string = CONSTANTS.EXIT;
-    const path = keyPath.split('.');
-    if (this.translations[overrideKey]) {
-      value = this.readValue(path, this.translations[overrideKey]);
-      if (value === CONSTANTS.EXIT) {
-        value = this.readValue(path, this.translations[this.defaultKey]);
-      }
-    } else if (this.translations[this.defaultKey]) {
-      value = this.readValue(path, this.translations[this.defaultKey]);
-    }
-    if (Boolean(params) && params !== {}) {
-      value = Object.keys(params)
-        .reduce((final, key) => final.replace(this.matcher(key), params[key]), value);
-    }
-    return value !== CONSTANTS.EXIT ? value : keyPath;
-  }
-
   public get(keyPaths: string | Array<string>): Observable<TranslationResult> {
     return this.translationsLoaded
       .filter(Boolean)
@@ -123,18 +105,36 @@ export class TranslateService {
       );
   }
 
-  public getOne(keyPath: string, fileName = this.overrideKey): Observable<TranslationResult> {
+  private getOne(keyPath: string, fileName = this.overrideKey): Observable<TranslationResult> {
     return Observable.from([this.read(keyPath, {}, fileName)])
   }
 
-  public getAll(keyPaths: Array<string>, fileName = this.overrideKey): Observable<TranslationResult> {
+  private getAll(keyPaths: Array<string>, fileName = this.overrideKey): Observable<TranslationResult> {
     return Observable.of(keyPaths.reduce(
       (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName) }), {}
     ));
   }
 
+  private read(keyPath: string, params = {}, overrideKey = this.overrideKey): string {
+    let value: string = CONSTANTS.EXIT;
+    const path = keyPath.split('.');
+    if (this.translations[overrideKey]) {
+      value = this.readValue(path, this.translations[overrideKey]);
+      if (value === CONSTANTS.EXIT) {
+        value = this.readValue(path, this.translations[this.defaultKey]);
+      }
+    } else if (this.translations[this.defaultKey]) {
+      value = this.readValue(path, this.translations[this.defaultKey]);
+    }
+    if (Boolean(params) && params !== {}) {
+      value = Object.keys(params)
+        .reduce((final, key) => final.replace(this.matcher(key), params[key]), value);
+    }
+    return value !== CONSTANTS.EXIT ? value : keyPath;
+  }
+
   // this is a tailored 'reduce' method that breaks if a value is not found
-  public readValue(path: Array<any>, translation: any): string | CONSTANTS.EXIT {
+  private readValue(path: Array<any>, translation: any): string | CONSTANTS.EXIT {
     const length = path.length;
     for (let i = 0; i < length; i++) {
       translation = translation[path[i]] ? translation[path[i]] : CONSTANTS.EXIT;

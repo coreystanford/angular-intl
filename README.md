@@ -96,3 +96,15 @@ Alternatively, you can get a translation without enforcing an entire file overri
 this.translateService.getByFileName('BODY.TITLE', 'alternate-en') // where 'alternate-en' is yet another language file
   .subscribe(translatedTitle => this.title = translatedTitle);
 ```
+
+## API
+
+- `getBrowserLanguage(): void`
+
+- `setDefault(fileName: string): void`
+
+- `setLanguage(fileName: string): void`
+
+- `get(keyPaths: string | Array<string>): Observable<TranslationResult>`
+
+- `getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult>`
