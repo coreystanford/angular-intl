@@ -2,12 +2,6 @@
 # yarn lockfile v1
 
 
-"@angular/animations@^5.0.0":
-  version "5.2.10"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-5.2.10.tgz#61718792e0922ac622fd7c6dfb0afbb996638692"
-  dependencies:
-    tslib "^1.7.1"
-
 "@angular/common@^5.0.0":
   version "5.2.10"
   resolved "https://registry.yarnpkg.com/@angular/common/-/common-5.2.10.tgz#828308df8505a31f219a6895ff91dbb178ebac98"
@@ -37,14 +31,6 @@
   resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-5.2.10.tgz#92883803de7362e635748a440dd5f6172fc2394a"
   dependencies:
     tslib "^1.7.1"
-
-"@angular/platform-server@^5.0.0":
-  version "5.2.10"
-  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-5.2.10.tgz#36185a8ce137c1b65d74186f4b21566bcdb791b3"
-  dependencies:
-    domino "^1.0.29"
-    tslib "^1.7.1"
-    xhr2 "^0.1.4"
 
 "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0-beta.47"
@@ -698,7 +684,7 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
 
-core-js@^2.4.0, core-js@^2.5.0:
+core-js@^2.4.0, core-js@^2.5.0, core-js@^2.5.6:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.6.tgz#0fe6d45bf3cac3ac364a9d72de7576f4eb221b9d"
 
@@ -869,10 +855,6 @@ domexception@^1.0.0:
   resolved "https://registry.yarnpkg.com/domexception/-/domexception-1.0.1.tgz#937442644ca6a31261ef36e3ec677fe805582c90"
   dependencies:
     webidl-conversions "^4.0.2"
-
-domino@^1.0.29:
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/domino/-/domino-1.0.30.tgz#54a4154ecae968616680f8feba3cedff355c71f4"
 
 duplexer@^0.1.1:
   version "0.1.1"
@@ -3469,10 +3451,6 @@ ws@^4.0.0:
   dependencies:
     async-limiter "~1.0.0"
     safe-buffer "~5.1.0"
-
-xhr2@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/xhr2/-/xhr2-0.1.4.tgz#7f87658847716db5026323812f818cadab387a5f"
 
 xml-name-validator@^3.0.0:
   version "3.0.0"

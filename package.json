@@ -1,8 +1,19 @@
 {
   "name": "angular-intl",
   "description": "A lightweight internationalization library for Angular applications",
-  "keywords": ["angular", "angular 2", "intl", "internationalization", "i18n", "internationalize", "localize", "localization", "translate", "translation"],
-  "version": "1.1.1",
+  "keywords": [
+    "angular",
+    "angular 2",
+    "intl",
+    "internationalization",
+    "i18n",
+    "internationalize",
+    "localize",
+    "localization",
+    "translate",
+    "translation"
+  ],
+  "version": "1.1.2",
   "repository": "git@github.com:coreystanford/angular-intl.git",
   "author": "Corey Stanford",
   "license": "MIT",
@@ -20,34 +31,57 @@
     "setupTestFrameworkScriptFile": "<rootDir>/setup-jest.ts",
     "verbose": true,
     "collectCoverage": true,
-    "transform": { "^.+\\.(tsx?|html)$": "ts-jest" },
+    "transform": {
+      "^.+\\.(tsx?|html)$": "ts-jest"
+    },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-    "testPathIgnorePatterns": ["<rootDir>/node_modules/", "mock.ts", "dist"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "mock.ts",
+      "dist"
+    ],
     "coverageDirectory": "src",
-    "collectCoverageFrom": ["src/**/*.ts"],
-    "coveragePathIgnorePatterns": ["<rootDir>/src/tests", "<rootDir>/src/types"],
-    "coverageReporters": ["text", "text-summary"]
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/tests",
+      "<rootDir>/src/types",
+      "<rootDir>/src/mocks"
+    ],
+    "coverageReporters": [
+      "text",
+      "text-summary"
+    ]
   },
-  "devDependencies": {
-    "@angular/animations": "^5.0.0",
+  "dependencies": {
     "@angular/common": "^5.0.0",
     "@angular/compiler": "^5.0.0",
     "@angular/core": "^5.0.0",
     "@angular/platform-browser": "^5.0.0",
     "@angular/platform-browser-dynamic": "^5.0.0",
-    "@angular/platform-server": "^5.0.0",
+    "core-js": "^2.5.6",
+    "rxjs": "^5.0.0",
+    "zone.js": "^0.8.26"
+  },
+  "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/node": "^10.0.4",
     "codelyzer": "^4.3.0",
     "jest": "^22.4.4",
     "jest-zone-patch": "^0.0.8",
-    "rxjs": "^5.0.0",
     "ts-jest": "^22.4.6",
     "tsc": "^1.20150623.0",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.3",
-    "zone.js": "^0.8.26"
+    "typescript": "^2.8.3"
   },
   "files": [
     "dist"

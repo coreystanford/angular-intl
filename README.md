@@ -55,7 +55,7 @@ Directive example:
 <p translate>BODY.TITLE</p>
 
 <!-- with parameters -->
-<p translate="{ firstName: 'Linda' }">BODY.GREETING</p>
+<p [translate]="{ firstName: 'Linda' }">BODY.GREETING</p>
 ```
 
 Service example:
