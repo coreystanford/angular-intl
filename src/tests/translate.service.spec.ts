@@ -1,5 +1,5 @@
 import { TranslateService } from '../translate.service';
-import { LoaderServiceMock } from './loader.service.mock';
+import { LoaderServiceMock } from '../mocks/loader.service.mock';
 import { async, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '../translate.module';
 

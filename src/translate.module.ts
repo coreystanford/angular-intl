@@ -8,6 +8,10 @@ import {
 } from '.';
 import { CONFIG } from './types';
 
+export function configFactory(config) {
+  return config;
+}
+
 @NgModule({
   imports: [HttpClientModule],
   declarations: [
@@ -20,27 +24,21 @@ import { CONFIG } from './types';
   ]
 })
 export class TranslateModule {
-  /**
-   * Use this method in your root module to provide the TranslateService
-   * @returns {ModuleWithProviders}
-   */
   static forRoot(config = {}): ModuleWithProviders {
     return {
       ngModule: TranslateModule,
       providers: [
         TranslateService,
         LoaderService,
-        { provide: CONFIG, useValue: config }
+        { provide: CONFIG, useFactory: configFactory(config) }
       ]
     };
   };
-  /**
-   * Use this method in your other (non root) modules to import the directive/pipe
-   * @returns {ModuleWithProviders}
-   */
   static forChild(): ModuleWithProviders {
     return {
       ngModule: TranslateModule
     }
   };
 }
+
+
