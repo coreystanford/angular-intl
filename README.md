@@ -72,7 +72,7 @@ this.translateService.get(['BODY.TITLE', 'BODY.DESCRIPTION'])
   });
 ```
 
-Default Overrides are also available, so after calling `setDefault`, you may call `setLanguage`, which will be used first, and then fall back to the default if the key is not found:
+Default overrides are also available, so after calling `setDefault`, you may call `setLanguage`, which will be used first, and then fall back to the default if the key is not found in the language file specified in `setLanguage`:
 
 eg. '/assets/languages/override-en.json':
 ```json
@@ -84,7 +84,7 @@ eg. '/assets/languages/override-en.json':
 ```
 
 ```ts
-this.translationService.setDefault('default-en');
+this.translateService.setDefault('default-en');
 this.translateService.setLanguage('override-en');
 ```
 

@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateService } from '../translate.service';
 import { TranslateModule } from '../translate.module';
-import { LoaderServiceMock, translations } from './loader.service.mock';
+import { LoaderServiceMock, translations } from '../mocks/loader.service.mock';
 
 @Component({
   template: `
