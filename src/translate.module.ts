@@ -6,7 +6,7 @@ import {
   TranslateService,
   LoaderService
 } from '.';
-import { CONFIG } from './types';
+import { CONFIG } from './types/config.token';
 
 @NgModule({
   imports: [HttpClientModule],
