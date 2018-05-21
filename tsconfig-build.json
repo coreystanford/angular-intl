@@ -2,11 +2,6 @@
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",
-    "paths": {
-      "@angular/*": [
-        "node_modules/@angular/*"
-      ]
-    },
     "outDir": "dist",
     "declaration": true,
     "moduleResolution": "node",
@@ -24,7 +19,7 @@
     "inlineSources": true
   },
   "files": [
-    "src/index.ts",
+    "public_api.ts",
     "node_modules/zone.js/dist/zone.js.d.ts"
   ],
   "angularCompilerOptions": {

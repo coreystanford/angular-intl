@@ -6,15 +6,19 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 const globals = {
   '@angular/core': 'ng.core',
   '@angular/common': 'ng.common',
-  '@angular/platform-browser': 'ng.platform-browser',
+  '@angular/common/http': 'ng.common.http',
+  'rxjs': 'Rx',
   'rxjs/Observable': 'Rx',
   'rxjs/Subject': 'Rx',
   'rxjs/BehaviorSubject': 'Rx',
-  'rxjs/operator/concatMap': 'Rx',
-  'rxjs/operator/filter': 'Rx',
-  'rxjs/operator/map': 'Rx',
-  'rxjs/observable/of': 'Rx',
-  'rxjs/observable/from': 'Rx',
+  'rxjs/operator/concatMap': 'Rx.Observable.prototype',
+  'rxjs/operator/filter': 'Rx.Observable.prototype',
+  'rxjs/operator/map': 'Rx.Observable.prototype',
+  'rxjs/observable/of': 'Rx.Observable.prototype',
+  'rxjs/observable/from': 'Rx.Observable.prototype',
+  'rxjs/add/operator/switchMap': 'Rx.Observable.prototype',
+  'rxjs/add/operator/switchMapTo': 'Rx.Observable.prototype',
+  'rxjs/add/operator/takeUntil': 'Rx.Observable.prototype',
 };
 
 export default {
