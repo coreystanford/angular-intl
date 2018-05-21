@@ -1,7 +1,8 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { CONFIG, TranslateConfiguration } from './types';
+import { CONFIG } from './types/config.token';
+import { TranslateConfiguration } from './types/translate-configuration.interface';
 
 @Injectable()
 export class LoaderService {

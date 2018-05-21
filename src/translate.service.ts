@@ -5,7 +5,10 @@ import { Subject } from 'rxjs/Subject';
 import { HttpClient } from '@angular/common/http';
 
 import { LoaderService } from './loader.service';
-import { CONFIG, CONSTANTS, TranslateConfiguration, TranslationResult } from './types';
+import { CONFIG } from './types/config.token';
+import { TranslateConfiguration } from './types/translate-configuration.interface';
+import { TranslationResult } from './types/translation-result.type';
+import { CONSTANTS } from './types/constants.enum';
 
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMapTo';

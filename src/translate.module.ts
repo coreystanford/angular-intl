@@ -1,12 +1,12 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import {
-  TranslateDirective,
-  TranslatePipe,
-  TranslateService,
-  LoaderService
-} from '.';
-import { CONFIG } from './types';
+
+import { TranslateDirective } from './translate.directive';
+import { TranslatePipe } from './translate.pipe';
+import { TranslateService } from './translate.service';
+import { LoaderService } from './loader.service';
+
+import { CONFIG } from './types/config.token';
 
 @NgModule({
   imports: [HttpClientModule],

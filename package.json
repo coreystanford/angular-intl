@@ -13,19 +13,26 @@
     "translate",
     "translation"
   ],
-  "version": "1.1.3",
+  "version": "1.1.4",
   "repository": "git@github.com:coreystanford/angular-intl.git",
   "author": "Corey Stanford",
+  "private": true,
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./bundles/angular-intl.umd.js",
+  "module": "./esm5/angular-intl.js",
+  "es2015": "./esm2015/angular-intl.js",
+  "types": "./angular-intl.d.ts",
   "scripts": {
+    "build": "node build.js",
+    "pack:lib": "yarn build && npm pack ./dist",
+    "publish:lib": "yarn build && npm publish ./dist",
+    "publish:lib:next": "yarn build && npm publish --tag next ./dist",
+    "compodoc": "compodoc -p tsconfig.json",
+    "compodoc:serve": "compodoc -s",
     "test": "jest",
     "watch": "jest --watch",
     "lint": "tslint --project tslint.json src/**/**.ts",
-    "check": "yarn test && yarn lint && yarn build",
-    "prepublish": "tsc",
-    "build": "rm -rf ./dist && tsc"
+    "check": "yarn test && yarn lint && yarn build"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/setup-jest.ts",
@@ -62,28 +69,38 @@
       "text-summary"
     ]
   },
-  "dependencies": {
+  "peerDependencies": {
+    "@angular/common": ">= 5.0.0",
+    "@angular/core": ">= 5.0.0",
+    "rxjs": ">= 5.0.0"
+  },
+  "devDependencies": {
     "@angular/common": "^5.0.0",
     "@angular/compiler": "^5.0.0",
+    "@angular/compiler-cli": "^6.0.2",
     "@angular/core": "^5.0.0",
     "@angular/platform-browser": "^5.0.0",
     "@angular/platform-browser-dynamic": "^5.0.0",
-    "core-js": "^2.5.6",
-    "rxjs": "^5.0.0",
-    "zone.js": "^0.8.26"
-  },
-  "devDependencies": {
+    "@compodoc/compodoc": "^1.1.3",
     "@types/jest": "^22.2.3",
     "@types/node": "^10.0.4",
+    "chalk": "^2.4.1",
     "codelyzer": "^4.3.0",
+    "core-js": "^2.5.6",
     "jest": "^22.4.4",
     "jest-zone-patch": "^0.0.8",
+    "rollup": "^0.59.1",
+    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-license": "^0.6.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rxjs": "^5.0.0",
+    "shelljs": "^0.8.2",
     "ts-jest": "^22.4.6",
     "tsc": "^1.20150623.0",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.3"
-  },
-  "files": [
-    "dist"
-  ]
+    "typescript": "2.7.2",
+    "uglify-js": "^3.3.26",
+    "zone.js": "^0.8.26"
+  }
 }
