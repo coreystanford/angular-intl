@@ -1,20 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject, Subject, of, from } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { switchMap, switchMapTo } from 'rxjs/internal/operators';
 
 import { LoaderService } from './loader.service';
 import { CONFIG } from './types/config.token';
 import { TranslateConfiguration } from './types/translate-configuration.interface';
 import { TranslationResult } from './types/translation-result.type';
 import { CONSTANTS } from './types/constants.enum';
-
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/switchMapTo';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/from';
 
 @Injectable()
 export class TranslateService {
@@ -75,12 +69,12 @@ export class TranslateService {
   }
 
   public get(keyPaths: string | Array<string>): Observable<TranslationResult> {
-    return this.translationsLoaded
-      .filter(Boolean)
-      .switchMapTo(keyPaths instanceof Array
+    return this.translationsLoaded.pipe(
+      filter(Boolean),
+      switchMapTo(keyPaths instanceof Array
         ? this.getAll(keyPaths)
-        : this.getOne(keyPaths)
-      );
+        : this.getOne(keyPaths))
+    );
   }
 
   public getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult> {
@@ -101,19 +95,19 @@ export class TranslateService {
           }
         );
     }
-    return translationLoaded
-      .switchMap(name => keyPaths instanceof Array
-        ? this.getAll(keyPaths, name)
-        : this.getOne(keyPaths, name)
-      );
+    return translationLoaded.pipe(
+      switchMap(name => keyPaths instanceof Array
+      ? this.getAll(keyPaths, name)
+      : this.getOne(keyPaths, name)
+    ));
   }
 
   private getOne(keyPath: string, fileName = this.overrideKey): Observable<TranslationResult> {
-    return Observable.from([this.read(keyPath, {}, fileName)])
+    return from([this.read(keyPath, {}, fileName)])
   }
 
   private getAll(keyPaths: Array<string>, fileName = this.overrideKey): Observable<TranslationResult> {
-    return Observable.of(keyPaths.reduce(
+    return of(keyPaths.reduce(
       (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName) }), {}
     ));
   }

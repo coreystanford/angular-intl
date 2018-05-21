@@ -1,7 +1,5 @@
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 import { LoaderService } from '../loader.service';
-
-import 'rxjs/add/observable/of';
 
 export const translations = {
   'default-en': {
@@ -16,5 +14,5 @@ export const LoaderServiceMock: LoaderService = {
   extension: '.json',
   http: null,
   config: null,
-  getFile: (key) => Observable.of(translations[key])
+  getFile: (key) => of(translations[key])
 };
