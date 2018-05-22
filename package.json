@@ -34,6 +34,7 @@
     "compodoc": "compodoc -p tsconfig.json",
     "compodoc:serve": "compodoc -s",
     "test": "jest",
+    "test:coverage": "jest && codecov",
     "watch": "jest --watch",
     "lint": "tslint --project tslint.json src/**/**.ts",
     "check": "yarn test && yarn lint && yarn build"
@@ -59,7 +60,7 @@
       "mock.ts",
       "dist"
     ],
-    "coverageDirectory": "src",
+    "coverageDirectory": "./coverage",
     "collectCoverageFrom": [
       "src/**/*.ts"
     ],
@@ -67,10 +68,6 @@
       "<rootDir>/src/tests",
       "<rootDir>/src/types",
       "<rootDir>/src/mocks"
-    ],
-    "coverageReporters": [
-      "text",
-      "text-summary"
     ]
   },
   "peerDependencies": {
