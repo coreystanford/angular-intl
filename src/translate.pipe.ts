@@ -23,10 +23,9 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
   }
 
   transform(val, args) {
-    this.translationLoaded$.subscribe(() => {
-      const readValue = this.translateService.read(val, args);
-      this.translation = readValue === val ? this.translation : readValue;
-    });
+    this.translationLoaded$.subscribe(() =>
+      this.translation = this.translateService.read(val, args)
+    );
     return this.translation;
   }
 
