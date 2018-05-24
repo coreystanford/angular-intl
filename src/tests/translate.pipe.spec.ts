@@ -49,19 +49,19 @@ describe('Translate Pipe', () => {
     test('an element with a known key loads the value', () => {
       const expectedText = translations[fileName].BODY.KNOWN_KEY;
       const resultText = component.knownKey.nativeElement.innerHTML;
-      expect(expectedText).toEqual(resultText);
+      expect(resultText).toEqual(expectedText);
     });
 
-    test('an element with an unknown key loads an empty string', () => {
-      const expectedText = '';
+    test('an element with an unknown key loads the original key', () => {
+      const expectedText = 'BODY.UNKNOWN_KEY';
       const resultText = component.unknownKey.nativeElement.innerHTML;
-      expect(expectedText).toEqual(resultText);
+      expect(resultText).toEqual(expectedText);
     });
 
     test('an element without a key loads an empty string', () => {
       const expectedText = '';
       const resultText = component.noKey.nativeElement.innerHTML;
-      expect(expectedText).toEqual(resultText);
+      expect(resultText).toEqual(expectedText);
     });
 
   })
