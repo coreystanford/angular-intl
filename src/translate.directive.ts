@@ -7,7 +7,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/takeUntil';
 
 @Directive({
-  selector: '[translate]',
+  selector: '[translate]'
 })
 export class TranslateDirective implements AfterViewInit, OnDestroy {
 
@@ -25,16 +25,21 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.keyPath = this.element.nativeElement.innerHTML.trim();
-    this.element.nativeElement.innerHTML = '';
-    this.translationLoaded$.subscribe(() =>
-      this.element.nativeElement.innerHTML = this.translateService.read(this.keyPath, this.params)
-    );
+    this.runCheck();
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  private runCheck() {
+    this.keyPath = this.element.nativeElement.textContent ? this.element.nativeElement.textContent.trim() : '';
+    this.element.nativeElement.textContent = '';
+    this.translationLoaded$.subscribe(() => {
+      const readValue = this.translateService.read(this.keyPath, this.params);
+      this.element.nativeElement.textContent = readValue === this.keyPath ? '' : readValue;
+    });
   }
 
 }

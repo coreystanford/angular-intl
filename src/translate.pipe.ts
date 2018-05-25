@@ -22,10 +22,11 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
       .takeUntil(this.unsubscribe);
   }
 
-  transform(val, args) {
-    this.translationLoaded$.subscribe(() =>
-      this.translation = this.translateService.read(val, args)
-    );
+  transform(val, args): string {
+    this.translationLoaded$.subscribe(() => {
+      const readValue = this.translateService.read(val ? val : '', args);
+      this.translation = readValue === val ? this.translation : readValue;
+    });
     return this.translation;
   }
 
