@@ -1,3 +1,7 @@
+### 1.1.6
+
+- handle undefined and null more gracefully and log a warning in the console.
+
 ### 1.1.5
 
 - allow HTML and natural text to pass as-is for a more lenient translate directive (allowing conditional translation within child components -- pass a key and have it translate, or pass an already translated string and have it display).
