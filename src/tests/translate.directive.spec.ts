@@ -9,6 +9,8 @@ import { LoaderServiceMock, translations } from '../mocks/loader.service.mock';
     <p #knownKey translate>BODY.KNOWN_KEY</p>
     <p #unknownKey translate>BODY.UNKNOWN_KEY</p>
     <p #noKey translate></p>
+    <p #undefinedKey translate>{{undefined}}</p>
+    <p #nullKey translate>{{null}}</p>
     <p #regularText translate>Regular Text</p>
     <div #childElements translate><div><p>Child Text</p></div></div>
     <div #childElementsKnownKey translate><div><p>BODY.KNOWN_KEY</p></div></div>
@@ -18,6 +20,8 @@ class TranslateDirectiveSpecComponent {
   @ViewChild('knownKey') knownKey: ElementRef;
   @ViewChild('unknownKey') unknownKey: ElementRef;
   @ViewChild('noKey') noKey: ElementRef;
+  @ViewChild('undefinedKey') undefinedKey: ElementRef;
+  @ViewChild('nullKey') nullKey: ElementRef;
   @ViewChild('regularText') regularText: ElementRef;
   @ViewChild('childElements') childElements: ElementRef;
   @ViewChild('childElementsKnownKey') childElementsKnownKey: ElementRef;
@@ -67,6 +71,18 @@ describe('Translate Directive', () => {
     test('an element without a key returns an empty string', () => {
       const expectedText = '';
       const resultText = component.noKey.nativeElement.textContent;
+      expect(resultText).toEqual(expectedText);
+    });
+
+    test('an element with an undefined key returns an empty string', () => {
+      const expectedText = '';
+      const resultText = component.undefinedKey.nativeElement.textContent;
+      expect(resultText).toEqual(expectedText);
+    });
+
+    test('an element with a null key returns an empty string', () => {
+      const expectedText = '';
+      const resultText = component.nullKey.nativeElement.textContent;
       expect(resultText).toEqual(expectedText);
     });
 

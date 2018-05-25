@@ -127,7 +127,11 @@ export class TranslateService {
       value = Object.keys(params)
         .reduce((final, key) => final.replace(this.matcher(key), params[key]), value);
     }
-    return value !== CONSTANTS.EXIT ? value : keyPath;
+    if (value === CONSTANTS.EXIT) {
+      setTimeout(() => console.error('Unknown key:', keyPath), 0);
+      return keyPath;
+    }
+    return value;
   }
 
   // this is a tailored 'reduce' method that breaks if a value is not found

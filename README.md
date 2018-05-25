@@ -6,8 +6,8 @@ A lightweight internationalization library for Angular applications.
 
 | Angular   | angular-intl    |
 | --------- | --------------- |
-| v6        | v2.0.0+         |
-| v5        | v1.0.1 - v1.1.4 |
+| v6        | >=2.0.0         |
+| v5        | 1.0.2 - 1.1.4   |
 
 ## Setup
 

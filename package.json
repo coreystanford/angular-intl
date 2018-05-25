@@ -33,9 +33,9 @@
     "publish:lib:next": "yarn build && npm publish --tag next ./dist",
     "compodoc": "compodoc -p tsconfig.json",
     "compodoc:serve": "compodoc -s",
-    "test": "jest",
-    "test:coverage": "jest && codecov",
-    "watch": "jest --watch",
+    "test": "jest --silent",
+    "test:coverage": "yarn test && codecov",
+    "watch": "yarn test --watch",
     "lint": "tslint --project tslint.json src/**/**.ts",
     "check": "yarn test && yarn lint && yarn build"
   },
