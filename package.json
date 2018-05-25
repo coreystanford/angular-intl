@@ -13,7 +13,7 @@
     "translate",
     "translation"
   ],
-  "version": "1.1.5",
+  "version": "1.1.6",
   "repository": "git@github.com:coreystanford/angular-intl.git",
   "author": "Corey Stanford",
   "private": true,
@@ -29,8 +29,9 @@
     "publish:lib:next": "yarn build && npm publish --tag next ./dist",
     "compodoc": "compodoc -p tsconfig.json",
     "compodoc:serve": "compodoc -s",
-    "test": "jest",
-    "watch": "jest --watch",
+    "test": "jest --silent",
+    "test:coverage": "yarn test && codecov",
+    "watch": "yarn test --watch",
     "lint": "tslint --project tslint.json src/**/**.ts",
     "check": "yarn test && yarn lint && yarn build"
   },

@@ -9,12 +9,16 @@ import { LoaderServiceMock, translations } from '../mocks/loader.service.mock';
     <p #knownKey>{{ 'BODY.KNOWN_KEY' | translate }}</p>
     <p #unknownKey>{{ 'BODY.UNKNOWN_KEY' | translate }}</p>
     <p #noKey>{{ '' | translate }}</p>
+    <p #undefinedKey>{{ undefined | translate }}</p>
+    <p #nullKey>{{ null | translate }}</p>
   `
 })
 class TranslatePipeSpecComponent {
   @ViewChild('knownKey') knownKey: ElementRef;
   @ViewChild('unknownKey') unknownKey: ElementRef;
   @ViewChild('noKey') noKey: ElementRef;
+  @ViewChild('undefinedKey') undefinedKey: ElementRef;
+  @ViewChild('nullKey') nullKey: ElementRef;
 }
 
 describe('Translate Pipe', () => {
@@ -48,19 +52,31 @@ describe('Translate Pipe', () => {
 
     test('an element with a known key loads the value', () => {
       const expectedText = translations[fileName].BODY.KNOWN_KEY;
-      const resultText = component.knownKey.nativeElement.innerHTML;
+      const resultText = component.knownKey.nativeElement.textContent;
       expect(resultText).toEqual(expectedText);
     });
 
-    test('an element with an unknown key loads the original key', () => {
-      const expectedText = 'BODY.UNKNOWN_KEY';
-      const resultText = component.unknownKey.nativeElement.innerHTML;
+    test('an element with an unknown key loads an empty string', () => {
+      const expectedText = '';
+      const resultText = component.unknownKey.nativeElement.textContent;
       expect(resultText).toEqual(expectedText);
     });
 
     test('an element without a key loads an empty string', () => {
       const expectedText = '';
-      const resultText = component.noKey.nativeElement.innerHTML;
+      const resultText = component.noKey.nativeElement.textContent;
+      expect(resultText).toEqual(expectedText);
+    });
+
+    test('an element with an undefined key loads an empty string', () => {
+      const expectedText = '';
+      const resultText = component.undefinedKey.nativeElement.textContent;
+      expect(resultText).toEqual(expectedText);
+    });
+
+    test('an element with a null key loads an empty string', () => {
+      const expectedText = '';
+      const resultText = component.nullKey.nativeElement.textContent;
       expect(resultText).toEqual(expectedText);
     });
 
