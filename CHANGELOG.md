@@ -1,4 +1,4 @@
-### 1.1.6
+### 1.1.8
 
 - handle undefined and null more gracefully and log a warning in the console.
 
