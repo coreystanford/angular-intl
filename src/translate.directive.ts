@@ -35,9 +35,8 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
 
   private runCheck() {
     this.keyPath = this.element.nativeElement.textContent ? this.element.nativeElement.textContent.trim() : '';
-    this.element.nativeElement.textContent = '';
     this.translationLoaded$.subscribe(() => {
-      const readValue = this.translateService.read(this.keyPath, this.params);
+      const readValue = this.keyPath !== '' ? this.translateService.read(this.keyPath, this.params) : '';
       this.element.nativeElement.textContent = readValue === this.keyPath ? '' : readValue;
     });
   }
