@@ -18,6 +18,7 @@ const globals = {
   'rxjs/observable/from': 'Rx.Observable.prototype',
   'rxjs/add/operator/switchMap': 'Rx.Observable.prototype',
   'rxjs/add/operator/switchMapTo': 'Rx.Observable.prototype',
+  'rxjs/add/operator/take': 'Rx.Observable.prototype',
   'rxjs/add/operator/takeUntil': 'Rx.Observable.prototype',
 };
 
