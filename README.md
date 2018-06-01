@@ -9,7 +9,9 @@ First, import the `TranslateModule` in your root module, like so:
 ```ts
 @NgModule({
   imports: [
-    TranslateModule.forRoot({ path: '/assets/languages' })
+    BrowserModule,
+    HttpClientModule,
+    TranslateModule.forRoot({ path: '/assets/languages/' })
   ]
 })
 export class AppModule {

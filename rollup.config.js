@@ -20,6 +20,7 @@ const globals = {
   'rxjs/add/operator/switchMapTo': 'Rx.Observable.prototype',
   'rxjs/add/operator/take': 'Rx.Observable.prototype',
   'rxjs/add/operator/takeUntil': 'Rx.Observable.prototype',
+  'rxjs/add/operator/combineLatest': 'Rx.Observable.prototype',
 };
 
 export default {

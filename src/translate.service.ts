@@ -13,6 +13,7 @@ import { CONSTANTS } from './types/constants.enum';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMapTo';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/from';
 
@@ -86,49 +87,51 @@ export class TranslateService {
 
   public getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult> {
     const translationLoaded = new Subject<string>();
-    if (this.translations[fileName]) {
-      translationLoaded.next(fileName);
-    } else {
-      this.loaderService.getFile(fileName)
-        .subscribe(translations => {
-            this.translations[fileName] = translations;
-            translationLoaded.next(fileName);
-          }, () => {
-            const defaultFileName = `${this.defaultPrefix}-${fileName.split('-')[1]}`;
-            this.loaderService.getFile(defaultFileName).subscribe(translations => {
+    const defaultFileName = `${this.defaultPrefix}-${fileName.split('-')[1]}`;
+    this.loaderService.getFile(fileName)
+      .combineLatest(this.loaderService.getFile(defaultFileName))
+      .filter(results => results.indexOf(undefined) === -1)
+      .take(1)
+      .subscribe(([translations, defaultTranslations]) => {
+          this.translations[fileName] = translations;
+          this.translations[defaultFileName] = defaultTranslations;
+          translationLoaded.next(fileName);
+        }, () => {
+          this.loaderService.getFile(defaultFileName)
+            .take(1)
+            .subscribe(translations => {
               this.translations[defaultFileName] = translations;
               translationLoaded.next(defaultFileName);
             });
-          }
-        );
-    }
+        }
+      );
     return translationLoaded
-      .switchMap(name => keyPaths instanceof Array
-        ? this.getAll(keyPaths, name)
-        : this.getOne(keyPaths, name)
+      .switchMap(overrideFileName => keyPaths instanceof Array
+        ? this.getAll(keyPaths, overrideFileName, defaultFileName)
+        : this.getOne(keyPaths, overrideFileName, defaultFileName)
       );
   }
 
-  private getOne(keyPath: string, fileName = this.overrideKey): Observable<TranslationResult> {
-    return Observable.from([this.read(keyPath, {}, fileName)])
+  private getOne(keyPath: string, fileName = this.overrideKey, defaultKey = this.defaultKey): Observable<TranslationResult> {
+    return Observable.from([this.read(keyPath, {}, fileName, defaultKey)])
   }
 
-  private getAll(keyPaths: Array<string>, fileName = this.overrideKey): Observable<TranslationResult> {
+  private getAll(keyPaths: Array<string>, fileName = this.overrideKey, defaultKey = this.defaultKey): Observable<TranslationResult> {
     return Observable.of(keyPaths.reduce(
-      (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName) }), {}
+      (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName, defaultKey) }), {}
     ));
   }
 
-  public read(keyPath: string, params = {}, overrideKey = this.overrideKey): string {
+  public read(keyPath: string, params = {}, overrideKey = this.overrideKey, defaultKey = this.defaultKey): string {
     let value: string = CONSTANTS.EXIT;
     const path = keyPath.split('.');
     if (this.translations[overrideKey]) {
       value = this.readValue(path, this.translations[overrideKey]);
       if (value === CONSTANTS.EXIT) {
-        value = this.readValue(path, this.translations[this.defaultKey]);
+        value = this.readValue(path, this.translations[defaultKey]);
       }
-    } else if (this.translations[this.defaultKey]) {
-      value = this.readValue(path, this.translations[this.defaultKey]);
+    } else if (this.translations[defaultKey]) {
+      value = this.readValue(path, this.translations[defaultKey]);
     }
     if (Boolean(params) && params !== {}) {
       value = Object.keys(params)
@@ -145,7 +148,7 @@ export class TranslateService {
   private readValue(path: Array<any>, translation: any): string | CONSTANTS.EXIT {
     const length = path.length;
     for (let i = 0; i < length; i++) {
-      translation = translation[path[i]] ? translation[path[i]] : CONSTANTS.EXIT;
+      translation = translation && translation[path[i]] ? translation[path[i]] : CONSTANTS.EXIT;
       if (translation === CONSTANTS.EXIT) {
         break;
       }
