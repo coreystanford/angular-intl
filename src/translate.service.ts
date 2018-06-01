@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, Subject, of, from } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { switchMap, switchMapTo } from 'rxjs/internal/operators';
+import { switchMap, switchMapTo, combineLatest, take } from 'rxjs/internal/operators';
 
 import { LoaderService } from './loader.service';
 import { CONFIG } from './types/config.token';
@@ -47,6 +47,7 @@ export class TranslateService {
     if (this.translations[this.defaultKey]) {
       this.translationsLoaded.next(true);
     } else {
+      this.translationsLoaded.next(false);
       this.loaderService.getFile(fileName)
         .subscribe(translations => {
           this.translations[this.defaultKey] = translations;
@@ -79,56 +80,58 @@ export class TranslateService {
 
   public getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult> {
     const translationLoaded = new Subject<string>();
-    if (this.translations[fileName]) {
-      translationLoaded.next(fileName);
-    } else {
-      this.loaderService.getFile(fileName)
-        .subscribe(translations => {
-            this.translations[fileName] = translations;
-            translationLoaded.next(fileName);
-          }, () => {
-            const defaultFileName = `${this.defaultPrefix}-${fileName.split('-')[1]}`;
-            this.loaderService.getFile(defaultFileName).subscribe(translations => {
+    const defaultFileName = `${this.defaultPrefix}-${fileName.split('-')[1]}`;
+    this.loaderService.getFile(fileName).pipe(
+        combineLatest(this.loaderService.getFile(defaultFileName)),
+        filter(results => results.indexOf(undefined) === -1),
+        take(1)
+      ).subscribe(([translations, defaultTranslations]) => {
+          this.translations[fileName] = translations;
+          this.translations[defaultFileName] = defaultTranslations;
+          translationLoaded.next(fileName);
+        }, () => {
+          this.loaderService.getFile(defaultFileName)
+            .pipe(take(1))
+            .subscribe(translations => {
               this.translations[defaultFileName] = translations;
               translationLoaded.next(defaultFileName);
             });
-          }
-        );
-    }
+        }
+      );
     return translationLoaded.pipe(
-      switchMap(name => keyPaths instanceof Array
-      ? this.getAll(keyPaths, name)
-      : this.getOne(keyPaths, name)
-    ));
+      switchMap(overrideFileName => keyPaths instanceof Array
+        ? this.getAll(keyPaths, overrideFileName, defaultFileName)
+        : this.getOne(keyPaths, overrideFileName, defaultFileName)
+      ));
   }
 
-  private getOne(keyPath: string, fileName = this.overrideKey): Observable<TranslationResult> {
-    return from([this.read(keyPath, {}, fileName)])
+  private getOne(keyPath: string, fileName = this.overrideKey, defaultKey = this.defaultKey): Observable<TranslationResult> {
+    return from([this.read(keyPath, {}, fileName, defaultKey)])
   }
 
-  private getAll(keyPaths: Array<string>, fileName = this.overrideKey): Observable<TranslationResult> {
+  private getAll(keyPaths: Array<string>, fileName = this.overrideKey, defaultKey = this.defaultKey): Observable<TranslationResult> {
     return of(keyPaths.reduce(
-      (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName) }), {}
+      (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName, defaultKey) }), {}
     ));
   }
 
-  public read(keyPath: string, params = {}, overrideKey = this.overrideKey): string {
+  public read(keyPath: string, params = {}, overrideKey = this.overrideKey, defaultKey = this.defaultKey): string {
     let value: string = CONSTANTS.EXIT;
     const path = keyPath.split('.');
     if (this.translations[overrideKey]) {
       value = this.readValue(path, this.translations[overrideKey]);
       if (value === CONSTANTS.EXIT) {
-        value = this.readValue(path, this.translations[this.defaultKey]);
+        value = this.readValue(path, this.translations[defaultKey]);
       }
-    } else if (this.translations[this.defaultKey]) {
-      value = this.readValue(path, this.translations[this.defaultKey]);
+    } else if (this.translations[defaultKey]) {
+      value = this.readValue(path, this.translations[defaultKey]);
     }
     if (Boolean(params) && params !== {}) {
       value = Object.keys(params)
         .reduce((final, key) => final.replace(this.matcher(key), params[key]), value);
     }
     if (value === CONSTANTS.EXIT) {
-      setTimeout(() => console.error('Unknown key:', keyPath), 0);
+      console.warn('Unknown Key: ', keyPath);
       return keyPath;
     }
     return value;
@@ -138,12 +141,30 @@ export class TranslateService {
   private readValue(path: Array<any>, translation: any): string | CONSTANTS.EXIT {
     const length = path.length;
     for (let i = 0; i < length; i++) {
-      translation = translation[path[i]] ? translation[path[i]] : CONSTANTS.EXIT;
+      translation = translation && translation[path[i]] ? translation[path[i]] : CONSTANTS.EXIT;
       if (translation === CONSTANTS.EXIT) {
         break;
       }
     }
     return translation;
+  }
+
+  public isEquivalent(a, b) {
+    if (!Boolean(a) || !Boolean(b)) {
+      return false;
+    }
+    const aProps = Object.getOwnPropertyNames(a);
+    const bProps = Object.getOwnPropertyNames(b);
+    if (aProps.length !== bProps.length) {
+      return false;
+    }
+    for (let i = 0; i < aProps.length; i++) {
+      const propName = aProps[i];
+      if (a[propName] !== b[propName]) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }

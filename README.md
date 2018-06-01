@@ -7,7 +7,7 @@ A lightweight internationalization library for Angular applications.
 | Angular   | angular-intl    |
 | --------- | --------------- |
 | v6        | >=2.0.0         |
-| v5        | 1.0.2 - 1.1.4   |
+| v5        | 1.0.2 - 1.1.12  |
 
 ## Setup
 
@@ -16,8 +16,9 @@ First, import the `TranslateModule` in your root module, like so:
 ```ts
 @NgModule({
   imports: [
+    BrowserModule,
     HttpClientModule,
-    TranslateModule.forRoot({ path: '/assets/languages' })
+    TranslateModule.forRoot({ path: '/assets/languages/' })
   ]
 })
 export class AppModule {

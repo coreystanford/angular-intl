@@ -2,7 +2,10 @@
 
 - Upgrade to Angular 6 and RxJS 6 (with pipeable operators)
 - Upgrade rollup build configuration to new standard and distribute `AOT`, `esm2015`, `fesm2015`, `esm5` and `umd`
-- Revert the leniency of the directive and pipe. This could be a breaking change for those that use the directive or pipe with variables that pass both keys and natural language, or place the directive on a parent element. The directive and pipe no longer allow anything other than keys to pass through, as introducing this ability to pass other content betrays the core tenant of the library: to translate a key to a value. If you have variables that can contain both keys and natural language, you must now split them apart at the template so that the pipe or directive only operate on the key, when passed. The library is less effective at resolving translations without showing the key as a flash of unstyled content without this restriction.
+
+### 1.1.8
+
+- handle undefined and null more gracefully and log a warning in the console.
 
 ### 1.1.5
 
