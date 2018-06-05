@@ -1,11 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, Input, OnDestroy } from '@angular/core';
 import { TranslateService } from './translate.service';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
-
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/takeUntil';
+import { Subject, Observable } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
 
 @Directive({
   selector: '[translate]'
@@ -29,7 +25,7 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
   constructor(public element: ElementRef,
               public translateService: TranslateService) {
     this.translationLoaded$ = this.translateService.translationsLoaded
-      .takeUntil(this.unsubscribe)
+      .pipe(takeUntil(this.unsubscribe));
   }
 
   ngAfterViewInit() {
@@ -51,7 +47,7 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
   private runOneCheck(keyPath, params) {
     if (keyPath) {
       this.translationLoaded$
-        .take(1)
+        .pipe(take(1))
         .subscribe(isLoaded => this.doCheck(isLoaded, keyPath, params));
     }
   }

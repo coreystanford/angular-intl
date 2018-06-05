@@ -1,21 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject, Subject, of as observableOf, from as observableFrom, combineLatest } from 'rxjs';
+import { filter, switchMap, switchMapTo, take } from 'rxjs/operators';
 
 import { LoaderService } from './loader.service';
 import { CONFIG } from './types/config.token';
 import { TranslateConfiguration } from './types/translate-configuration.interface';
 import { TranslationResult } from './types/translation-result.type';
 import { CONSTANTS } from './types/constants.enum';
-
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/switchMapTo';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/combineLatest';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/from';
 
 @Injectable()
 export class TranslateService {
@@ -77,47 +69,47 @@ export class TranslateService {
   }
 
   public get(keyPaths: string | Array<string>): Observable<TranslationResult> {
-    return this.translationsLoaded
-      .filter(Boolean)
-      .switchMapTo(keyPaths instanceof Array
+    return this.translationsLoaded.pipe(
+      filter(Boolean),
+      switchMapTo(keyPaths instanceof Array
         ? this.getAll(keyPaths)
-        : this.getOne(keyPaths)
-      );
+        : this.getOne(keyPaths))
+    );
   }
 
   public getByFileName(keyPaths: string | Array<string>, fileName: string): Observable<TranslationResult> {
     const translationLoaded = new Subject<string>();
     const defaultFileName = `${this.defaultPrefix}-${fileName.split('-')[1]}`;
-    this.loaderService.getFile(fileName)
-      .combineLatest(this.loaderService.getFile(defaultFileName))
-      .filter(results => results.indexOf(undefined) === -1)
-      .take(1)
-      .subscribe(([translations, defaultTranslations]) => {
+    this.loaderService.getFile(fileName).pipe(
+        file => combineLatest(file, this.loaderService.getFile(defaultFileName)),
+        filter(([file, defaultFile]) => [file, defaultFile].indexOf(undefined) === -1),
+        take(1)
+      ).subscribe(([translations, defaultTranslations]) => {
           this.translations[fileName] = translations;
           this.translations[defaultFileName] = defaultTranslations;
           translationLoaded.next(fileName);
         }, () => {
           this.loaderService.getFile(defaultFileName)
-            .take(1)
+            .pipe(take(1))
             .subscribe(translations => {
               this.translations[defaultFileName] = translations;
               translationLoaded.next(defaultFileName);
             });
         }
       );
-    return translationLoaded
-      .switchMap(overrideFileName => keyPaths instanceof Array
+    return translationLoaded.pipe(
+      switchMap(overrideFileName => keyPaths instanceof Array
         ? this.getAll(keyPaths, overrideFileName, defaultFileName)
         : this.getOne(keyPaths, overrideFileName, defaultFileName)
-      );
+      ));
   }
 
   private getOne(keyPath: string, fileName = this.overrideKey, defaultKey = this.defaultKey): Observable<TranslationResult> {
-    return Observable.from([this.read(keyPath, {}, fileName, defaultKey)])
+    return observableFrom([this.read(keyPath, {}, fileName, defaultKey)])
   }
 
   private getAll(keyPaths: Array<string>, fileName = this.overrideKey, defaultKey = this.defaultKey): Observable<TranslationResult> {
-    return Observable.of(keyPaths.reduce(
+    return observableOf(keyPaths.reduce(
       (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName, defaultKey) }), {}
     ));
   }

@@ -1,6 +1,7 @@
-import { Observable } from 'rxjs/Observable';
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 import { CONFIG } from './types/config.token';
 import { TranslateConfiguration } from './types/translate-configuration.interface';
 

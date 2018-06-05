@@ -2,6 +2,13 @@
 
 A lightweight internationalization library for Angular applications.
 
+## Versions
+
+| Angular   | angular-intl    |
+| --------- | --------------- |
+| v6        | >=2.0.0         |
+| v5        | 1.0.2 - 1.1.12  |
+
 ## Setup
 
 First, import the `TranslateModule` in your root module, like so:
