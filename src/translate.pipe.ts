@@ -1,8 +1,7 @@
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from './translate.service';
 import { Subject, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { takeUntil } from 'rxjs/internal/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 
 @Pipe({
   name: 'translate',

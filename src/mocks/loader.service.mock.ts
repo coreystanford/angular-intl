@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { of as observableOf } from 'rxjs';
 import { LoaderService } from '../loader.service';
 
 export const translations = {
@@ -14,5 +14,5 @@ export const LoaderServiceMock: LoaderService = {
   extension: '.json',
   http: null,
   config: null,
-  getFile: (key) => of(translations[key])
+  getFile: (key) => observableOf(translations[key])
 };

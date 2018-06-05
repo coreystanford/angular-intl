@@ -3,9 +3,10 @@
 - Upgrade to Angular 6 and RxJS 6 (with pipeable operators)
 - Upgrade rollup build configuration to new standard and distribute `AOT`, `esm2015`, `fesm2015`, `esm5` and `umd`
 
-### 1.1.8
+### 1.1.8 - 1.1.12
 
 - handle undefined and null more gracefully and log a warning in the console.
+- update getFileByName to more rreliably capture the translations by adding the default fallback to the call. This ensures the new file doesn't throw a lot of warnings in the console, thus slowing the app.
 
 ### 1.1.5
 

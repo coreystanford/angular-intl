@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, Subject, of, from } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { switchMap, switchMapTo, combineLatest, take } from 'rxjs/internal/operators';
+import { Observable, BehaviorSubject, Subject, of as observableOf, from as observableFrom, combineLatest } from 'rxjs';
+import { filter, switchMap, switchMapTo, take } from 'rxjs/operators';
 
 import { LoaderService } from './loader.service';
 import { CONFIG } from './types/config.token';
@@ -82,8 +81,8 @@ export class TranslateService {
     const translationLoaded = new Subject<string>();
     const defaultFileName = `${this.defaultPrefix}-${fileName.split('-')[1]}`;
     this.loaderService.getFile(fileName).pipe(
-        combineLatest(this.loaderService.getFile(defaultFileName)),
-        filter(results => results.indexOf(undefined) === -1),
+        file => combineLatest(file, this.loaderService.getFile(defaultFileName)),
+        filter(([file, defaultFile]) => [file, defaultFile].indexOf(undefined) === -1),
         take(1)
       ).subscribe(([translations, defaultTranslations]) => {
           this.translations[fileName] = translations;
@@ -106,11 +105,11 @@ export class TranslateService {
   }
 
   private getOne(keyPath: string, fileName = this.overrideKey, defaultKey = this.defaultKey): Observable<TranslationResult> {
-    return from([this.read(keyPath, {}, fileName, defaultKey)])
+    return observableFrom([this.read(keyPath, {}, fileName, defaultKey)])
   }
 
   private getAll(keyPaths: Array<string>, fileName = this.overrideKey, defaultKey = this.defaultKey): Observable<TranslationResult> {
-    return of(keyPaths.reduce(
+    return observableOf(keyPaths.reduce(
       (acc, keyPath) => ({ ...acc, [keyPath]: this.read(keyPath, {}, fileName, defaultKey) }), {}
     ));
   }
