@@ -1,3 +1,7 @@
+### 2.0.1
+
+- add documentation via compodoc
+
 # 2.0.0
 
 - Upgrade to Angular 6 and RxJS 6 (with pipeable operators)
