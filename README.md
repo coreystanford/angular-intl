@@ -1,4 +1,4 @@
-# angular-intl [![Build Status](https://img.shields.io/circleci/project/github/coreystanford/angular-intl/master.svg)](https://circleci.com/gh/coreystanford/angular-intl) [![npm version](https://img.shields.io/npm/v/angular-intl.svg)](https://www.npmjs.com/package/angular-intl)
+# angular-intl [![Build Status](https://img.shields.io/circleci/project/github/coreystanford/angular-intl/master.svg)](https://circleci.com/gh/coreystanford/angular-intl) [![npm version](https://img.shields.io/npm/v/angular-intl.svg)](https://www.npmjs.com/package/angular-intl) [![bundle size](https://img.shields.io/bundlephobia/min/angular-intl.svg)](https://www.npmjs.com/package/angular-intl)
 
 A lightweight internationalization library for Angular applications.
 
